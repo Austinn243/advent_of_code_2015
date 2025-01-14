@@ -4,6 +4,7 @@ Probably a Fire Hazard
 https://adventofcode.com/2015/day/6
 """
 
+import re
 from enum import Enum
 from itertools import chain
 from os import path
@@ -15,6 +16,8 @@ INPUT_FILE = "input.txt"
 
 HEIGHT = 1000
 WIDTH = 1000
+
+COMMAND_REGEX = re.compile(r"^(turn on|turn off|toggle) (\d+,\d+) through (\d+,\d+)$")
 
 LightState = int
 LightGrid = np.ndarray[LightState]
@@ -70,27 +73,23 @@ def execute_command(
     return grid
 
 
+def parse_coordinate(segment: str) -> Coordinate:
+    """Parse a coordinate from a segment of text."""
+
+    x, y = map(int, segment.split(","))
+    return x, y
+
+
 def parse_raw_command(line: str) -> RawCommand:
     """Read a command from a line of text."""
 
-    parts = line.split()
+    pattern_match = COMMAND_REGEX.match(line)
+    if pattern_match is None:
+        raise ValueError(f"Invalid command: {line}")
 
-    command_type = None
-    start_segment = None
-    end_segment = None
-
-    if parts[0] == "toggle":
-        command_type = CommandType.TOGGLE
-        start_segment = parts[1]
-        end_segment = parts[3]
-    else:
-        start_segment = parts[2]
-        end_segment = parts[4]
-
-        command_type = CommandType.TURN_ON if parts[1] == "on" else CommandType.TURN_OFF
-
-    start_coords = tuple(map(int, start_segment.split(",")))
-    end_coords = tuple(map(int, end_segment.split(",")))
+    command_type = CommandType(pattern_match.group(1))
+    start_coords = parse_coordinate(pattern_match.group(2))
+    end_coords = parse_coordinate(pattern_match.group(3))
 
     return command_type, start_coords, end_coords
 

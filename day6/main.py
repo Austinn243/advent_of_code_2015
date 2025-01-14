@@ -6,13 +6,14 @@ https://adventofcode.com/2015/day/6
 
 from enum import Enum
 from itertools import chain
-from pathlib import Path
+from os import path
 from typing import Callable
 
 import numpy as np
 
-HEIGHT = 1000
 INPUT_FILE = "input.txt"
+
+HEIGHT = 1000
 WIDTH = 1000
 
 LightState = int
@@ -69,8 +70,8 @@ def execute_command(
     return grid
 
 
-def read_command(line: str) -> RawCommand:
-    """Read a command from a line of input."""
+def parse_raw_command(line: str) -> RawCommand:
+    """Read a command from a line of text."""
 
     parts = line.split()
 
@@ -94,23 +95,19 @@ def read_command(line: str) -> RawCommand:
     return command_type, start_coords, end_coords
 
 
-def read_input() -> list[RawCommand]:
-    """Read the input file and return the list of raw commands."""
+def read_raw_commands(file_path: str) -> list[RawCommand]:
+    """Read raw commands from a file."""
 
-    commands = []
-    path = Path(__file__).parent / INPUT_FILE
-
-    with open(path, encoding="utf-8") as file:
-        for line in file:
-            commands.append(read_command(line))
-
-    return commands
+    with open(file_path, encoding="utf-8") as file:
+        return [parse_raw_command(line) for line in file]
 
 
 def main() -> None:
     """Execute the program."""
 
-    raw_commands = read_input()
+    file_path = path.join(path.dirname(__file__), INPUT_FILE)
+
+    raw_commands = read_raw_commands(file_path)
 
     for i, command_map in enumerate([COMMAND_MAP_V1, COMMAND_MAP_V2]):
         grid = np.full((HEIGHT, WIDTH), 0)

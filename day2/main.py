@@ -4,7 +4,9 @@ I Was Told There Would Be No Math
 https://adventofcode.com/2015/day/2
 """
 
-INPUT_FILE = "./input.txt"
+from os import path
+
+INPUT_FILE = "input.txt"
 
 
 class Present:
@@ -12,7 +14,7 @@ class Present:
 
     def __init__(self, length: int, width: int, height: int) -> None:
         """Initialize the present with its dimensions."""
-        
+
         self.length = length
         self.width = width
         self.height = height
@@ -49,8 +51,8 @@ class Present:
         return wrapper + bow
 
 
-def read_present(line: str) -> Present:
-    """Read information about a present from a line of the input file."""
+def parse_present(line: str) -> Present:
+    """Read information about a present from a line of text."""
 
     raw_dimensions = line.strip().split("x")
     dimensions = tuple(map(int, raw_dimensions))
@@ -58,22 +60,19 @@ def read_present(line: str) -> Present:
     return Present(*dimensions)
 
 
-def read_input() -> list[Present]:
-    """Read the presents from the input file."""
+def read_presents(file_path: str) -> list[Present]:
+    """Read the presents from an input file."""
 
-    presents = []
-
-    with open(INPUT_FILE, encoding="utf-8") as file:
-        for line in file:
-            presents.append(read_present(line))
-
-    return presents
+    with open(file_path, encoding="utf-8") as file:
+        return [parse_present(line) for line in file]
 
 
 def main() -> None:
     """Execute the program."""
 
-    presents = read_input()
+    file_path = path.join(path.dirname(__file__), INPUT_FILE)
+
+    presents = read_presents(file_path)
     total_wrapping_paper = sum(
         present.required_wrapping_paper() for present in presents
     )

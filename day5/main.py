@@ -6,20 +6,19 @@ https://adventofcode.com/2015/day/5
 
 from collections import defaultdict
 from itertools import pairwise
-from pathlib import Path
+from os import path
 from typing import Callable, Iterable, TypeVar
 
 INPUT_FILE = "input.txt"
+
 NAUGHTY_SUBSTRINGS = frozenset(["ab", "cd", "pq", "xy"])
 VOWELS = frozenset("aeiou")
 
 T = TypeVar("T")
 
 
-def read_input() -> list[str]:
-    """Read the input file and return its content as a list of strings."""
-
-    file_path = Path(__file__).parent / INPUT_FILE
+def read_input(file_path: str) -> list[str]:
+    """Read the lines of text from an input file."""
 
     with open(file_path, encoding="utf-8") as file:
         return file.read().strip().split("\n")
@@ -114,7 +113,9 @@ def count_nice_strings(candidates: list[str], validator: Callable[[str], bool]) 
 def main() -> None:
     """Execute the program."""
 
-    candidates = read_input()
+    file_path = path.join(path.dirname(__file__), INPUT_FILE)
+
+    candidates = read_input(file_path)
 
     for validator in [is_nice_string, is_nice_string_v2]:
         nice_string_count = count_nice_strings(candidates, validator)

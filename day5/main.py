@@ -7,14 +7,12 @@ https://adventofcode.com/2015/day/5
 from collections import defaultdict
 from itertools import pairwise
 from os import path
-from typing import Callable, Iterable, TypeVar
+from typing import Callable, Iterable
 
 INPUT_FILE = "input.txt"
 
 NAUGHTY_SUBSTRINGS = frozenset(["ab", "cd", "pq", "xy"])
 VOWELS = frozenset("aeiou")
-
-T = TypeVar("T")
 
 
 def read_input(file_path: str) -> list[str]:
@@ -80,7 +78,7 @@ def contains_non_overlapping_repeated_pair(candidate: str) -> bool:
     return False
 
 
-def triplewise(iterable: Iterable[T]) -> Iterable[tuple[T, T, T]]:
+def triplewise[T](iterable: Iterable[T]) -> Iterable[tuple[T, T, T]]:
     """Iterate over an iterable in groups of three."""
 
     for (first, second), (_, third) in pairwise(pairwise(iterable)):

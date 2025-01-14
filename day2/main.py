@@ -67,18 +67,29 @@ def read_presents(file_path: str) -> list[Present]:
         return [parse_present(line) for line in file]
 
 
+def get_total_wrapping_paper(presents: list[Present]) -> int:
+    """Calculate the total wrapping paper required for all presents."""
+
+    return sum(present.required_wrapping_paper() for present in presents)
+
+
+def get_total_ribbon(presents: list[Present]) -> int:
+    """Calculate the total ribbon required for all presents."""
+
+    return sum(present.required_ribbon() for present in presents)
+
+
 def main() -> None:
     """Execute the program."""
 
     file_path = path.join(path.dirname(__file__), INPUT_FILE)
 
     presents = read_presents(file_path)
-    total_wrapping_paper = sum(
-        present.required_wrapping_paper() for present in presents
-    )
+
+    total_wrapping_paper = get_total_wrapping_paper(presents)
     print(f"Total wrapping paper required: {total_wrapping_paper}")
 
-    total_ribbon = sum(present.required_ribbon() for present in presents)
+    total_ribbon = get_total_ribbon(presents)
     print(f"Total ribbon required: {total_ribbon}")
 
 

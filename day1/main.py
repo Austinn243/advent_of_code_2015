@@ -4,13 +4,15 @@ Not Quite Lisp
 https://adventofcode.com/2015/day/1
 """
 
-INPUT_FILE = "./input.txt"
+from os import path
+
+INPUT_FILE = "input.txt"
 
 
-def read_input() -> str:
-    """Read the input file and return its content."""
+def read_instructions(file_path: str) -> str:
+    """Read instructions from an input file."""
 
-    with open(INPUT_FILE, encoding="utf-8") as file:
+    with open(file_path, encoding="utf-8") as file:
         return file.read()
 
 
@@ -59,7 +61,9 @@ def find_first_basement_instruction(instructions: str) -> int:
 def main() -> None:
     """Execute the program."""
 
-    instructions = read_input()
+    file_path = path.join(path.dirname(__file__), INPUT_FILE)
+
+    instructions = read_instructions(file_path)
 
     floor = find_final_floor(instructions)
     print(f"Santa is on floor {floor}.")

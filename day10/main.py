@@ -4,7 +4,7 @@ Elves Look, Elves Say
 https://adventofcode.com/2015/day/10
 """
 
-INPUT = "1321131112"
+INPUT_SEQUENCE = "1321131112"
 
 
 def look_and_say(sequence: str) -> str:
@@ -25,20 +25,27 @@ def look_and_say(sequence: str) -> str:
     return "".join(f"{count}{digit}" for digit, count in subsequences)
 
 
+def look_and_say_n_times(sequence: str, n: int) -> str:
+    """Apply the look-and-say method n times to the sequence."""
+
+    for _ in range(n):
+        sequence = look_and_say(sequence)
+
+    return sequence
+
+
 def main() -> None:
     """Execute the program."""
 
-    sequence = INPUT
+    initial_sequence = INPUT_SEQUENCE
 
-    for _ in range(40):
-        sequence = look_and_say(sequence)
+    sequence_after_40 = look_and_say_n_times(initial_sequence, 40)
+    print("After 40 iterations:")
+    print(f"The length of the sequence is: {len(sequence_after_40)}")
 
-    print(f"Part 1: {len(sequence)}")
-
-    for _ in range(10):
-        sequence = look_and_say(sequence)
-
-    print(f"Part 2: {len(sequence)}")
+    sequence_after_50 = look_and_say_n_times(sequence_after_40, 10)
+    print("After 50 iterations:")
+    print(f"The length of the sequence is: {len(sequence_after_50)}")
 
 
 if __name__ == "__main__":

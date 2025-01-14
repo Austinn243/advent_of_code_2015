@@ -4,7 +4,9 @@ Perfectly Spherical Houses in a Vacuum
 https://adventofcode.com/2015/day/3
 """
 
-INPUT_FILE = "./input.txt"
+from os import path
+
+INPUT_FILE = "input.txt"
 
 
 class GiftGrid:
@@ -51,17 +53,19 @@ class GiftGrid:
                 raise ValueError(f"Invalid direction: {direction}")
 
 
-def read_input() -> str:
+def read_directions(file_path: str) -> str:
     """Read directions from the input file."""
 
-    with open(INPUT_FILE, encoding="UTF-8") as file:
+    with open(file_path, encoding="UTF-8") as file:
         return file.read().strip()
 
 
 def main() -> None:
     """Execute the program."""
 
-    directions = read_input()
+    file_path = path.join(path.dirname(__file__), INPUT_FILE)
+
+    directions = read_directions(file_path)
 
     for agent_count in range(1, 3):
         gift_grid = GiftGrid()

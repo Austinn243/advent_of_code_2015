@@ -5,9 +5,9 @@ https://adventofcode.com/2015/day/5
 """
 
 from collections import defaultdict
+from collections.abc import Callable, Iterable
 from itertools import pairwise
 from os import path
-from typing import Callable, Iterable
 
 INPUT_FILE = "input.txt"
 

@@ -27,44 +27,20 @@ class Direction(Enum):
     LEFT = "<"
 
 
-class GiftGrid:
-    """A grid of houses that received gifts."""
-
-    def __init__(self) -> None:
-        """Initialize the grid with the starting house."""
-
-        self.visited = {Position(0, 0)}
-
-    def count_houses(self) -> int:
-        """Count the number of houses that received at least one gift."""
-
-        return len(self.visited)
-
-    def perform_deliveries(
-        self,
-        directions: list[Direction],
-        agent_count: int = 1,
-    ) -> None:
-        """Deliver gifts to the houses according to the given directions."""
-
-        routes = []
-
-        for i in range(agent_count):
-            routes.append(directions[i::agent_count])
-
-        for route in routes:
-            position = Position(0, 0)
-
-            for direction in route:
-                position = advance_position(position, direction)
-                self.visited.add(position)
-
-
 def read_directions(file_path: str) -> list[Direction]:
     """Read directions from the input file."""
 
     with open(file_path, encoding="UTF-8") as file:
         return [Direction(char) for char in file.read().strip()]
+
+
+def split_directions(
+    directions: list[Direction],
+    agent_count: int,
+) -> list[list[Direction]]:
+    """Split the directions into separate routes for each agent."""
+
+    return [directions[i::agent_count] for i in range(agent_count)]
 
 
 def advance_position(position: Position, direction: Direction) -> Position:
@@ -81,6 +57,25 @@ def advance_position(position: Position, direction: Direction) -> Position:
             return Position(position.x - 1, position.y)
 
 
+def deliver_gifts(directions: list[Direction], agent_count: int = 1) -> int:
+    """Deliver gifts to the houses according to the given directions.
+
+    Returns the number of houses visited.
+    """
+
+    routes = split_directions(directions, agent_count)
+    visited = {Position(0, 0)}
+
+    for route in routes:
+        position = Position(0, 0)
+
+        for direction in route:
+            position = advance_position(position, direction)
+            visited.add(position)
+
+    return len(visited)
+
+
 def main() -> None:
     """Execute the program."""
 
@@ -88,12 +83,11 @@ def main() -> None:
 
     directions = read_directions(file_path)
 
-    for agent_count in range(1, 3):
-        gift_grid = GiftGrid()
-        gift_grid.perform_deliveries(directions, agent_count=agent_count)
+    house_count_alone = deliver_gifts(directions, 1)
+    print(f"On his own, Santa delivered gifts to {house_count_alone} houses.")
 
-        house_count = gift_grid.count_houses()
-        print(f"{agent_count} Santa(s) delivered gifts to {house_count} houses.")
+    house_count_with_help = deliver_gifts(directions, 2)
+    print(f"With help, Santa delivered gifts to {house_count_with_help} houses.")
 
 
 if __name__ == "__main__":

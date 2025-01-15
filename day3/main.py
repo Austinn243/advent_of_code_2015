@@ -6,8 +6,16 @@ https://adventofcode.com/2015/day/3
 
 from enum import Enum
 from os import path
+from typing import NamedTuple
 
 INPUT_FILE = "input.txt"
+
+
+class Position(NamedTuple):
+    """A position on the grid."""
+
+    x: int
+    y: int
 
 
 class Direction(Enum):
@@ -25,7 +33,7 @@ class GiftGrid:
     def __init__(self) -> None:
         """Initialize the grid with the starting house."""
 
-        self.visited = {(0, 0)}
+        self.visited = {Position(0, 0)}
 
     def count_houses(self) -> int:
         """Count the number of houses that received at least one gift."""
@@ -45,26 +53,11 @@ class GiftGrid:
             routes.append(directions[i::agent_count])
 
         for route in routes:
-            x, y = (0, 0)
+            position = Position(0, 0)
 
             for direction in route:
-                x, y = self._move(x, y, direction)
-                self.visited.add((x, y))
-
-    def _move(self, x: int, y: int, direction: Direction) -> tuple[int, int]:
-        """Move Santa according to the given direction."""
-
-        match direction:
-            case Direction.UP:
-                return x, y + 1
-            case Direction.DOWN:
-                return x, y - 1
-            case Direction.RIGHT:
-                return x + 1, y
-            case Direction.LEFT:
-                return x - 1, y
-            case _:
-                raise ValueError(f"Invalid direction: {direction}")
+                position = advance_position(position, direction)
+                self.visited.add(position)
 
 
 def read_directions(file_path: str) -> list[Direction]:
@@ -72,6 +65,20 @@ def read_directions(file_path: str) -> list[Direction]:
 
     with open(file_path, encoding="UTF-8") as file:
         return [Direction(char) for char in file.read().strip()]
+
+
+def advance_position(position: Position, direction: Direction) -> Position:
+    """Advance the position in the given direction."""
+
+    match direction:
+        case Direction.UP:
+            return Position(position.x, position.y + 1)
+        case Direction.DOWN:
+            return Position(position.x, position.y - 1)
+        case Direction.RIGHT:
+            return Position(position.x + 1, position.y)
+        case Direction.LEFT:
+            return Position(position.x - 1, position.y)
 
 
 def main() -> None:

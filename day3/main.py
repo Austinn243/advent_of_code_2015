@@ -4,9 +4,19 @@ Perfectly Spherical Houses in a Vacuum
 https://adventofcode.com/2015/day/3
 """
 
+from enum import Enum
 from os import path
 
 INPUT_FILE = "input.txt"
+
+
+class Direction(Enum):
+    """Directions in which Santa can move."""
+
+    UP = "^"
+    DOWN = "v"
+    RIGHT = ">"
+    LEFT = "<"
 
 
 class GiftGrid:
@@ -22,7 +32,11 @@ class GiftGrid:
 
         return len(self.visited)
 
-    def perform_deliveries(self, directions: str, agent_count: int = 1) -> None:
+    def perform_deliveries(
+        self,
+        directions: list[Direction],
+        agent_count: int = 1,
+    ) -> None:
         """Deliver gifts to the houses according to the given directions."""
 
         routes = []
@@ -37,27 +51,27 @@ class GiftGrid:
                 x, y = self._move(x, y, direction)
                 self.visited.add((x, y))
 
-    def _move(self, x: int, y: int, direction: str) -> tuple[int, int]:
+    def _move(self, x: int, y: int, direction: Direction) -> tuple[int, int]:
         """Move Santa according to the given direction."""
 
         match direction:
-            case "^":
+            case Direction.UP:
                 return x, y + 1
-            case "v":
+            case Direction.DOWN:
                 return x, y - 1
-            case ">":
+            case Direction.RIGHT:
                 return x + 1, y
-            case "<":
+            case Direction.LEFT:
                 return x - 1, y
             case _:
                 raise ValueError(f"Invalid direction: {direction}")
 
 
-def read_directions(file_path: str) -> str:
+def read_directions(file_path: str) -> list[Direction]:
     """Read directions from the input file."""
 
     with open(file_path, encoding="UTF-8") as file:
-        return file.read().strip()
+        return [Direction(char) for char in file.read().strip()]
 
 
 def main() -> None:

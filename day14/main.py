@@ -11,9 +11,13 @@ from os import path
 INPUT_FILE = "input.txt"
 TEST_FILE = "test.txt"
 
-REINDEER_REGEX = re.compile(r"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.")
+REINDEER_REGEX = re.compile(
+    r"(\w+) can fly (\d+) km/s for (\d+) seconds, "
+    r"but then must rest for (\d+) seconds.",
+)
 
 TARGET_TIME = 2503
+
 
 @dataclass
 class Reindeer:
@@ -67,9 +71,12 @@ def find_distance_after_time(reindeer: Reindeer, time: int) -> int:
     return distance
 
 
-def find_winning_reindeer_by_distance(reindeer: list[Reindeer], race_time: int) -> tuple[Reindeer, int]:
-    """Determine which reindeer is the winner based on their distance travelled after a given time.
-    
+def find_winning_reindeer_by_distance(
+    reindeer: list[Reindeer],
+    race_time: int,
+) -> tuple[Reindeer, int]:
+    """Determine the winning reindeer based on the distance covered in a given time.
+
     Returns the winning reindeer and the distance they traveled.
     """
 
@@ -89,12 +96,15 @@ def find_winning_reindeer_by_distance(reindeer: list[Reindeer], race_time: int) 
     return winner, winning_distance
 
 
-def find_winning_reindeer_by_points(reindeer: list[Reindeer], race_time: int) -> tuple[Reindeer, int]:
+def find_winning_reindeer_by_points(
+    reindeer: list[Reindeer],
+    race_time: int,
+) -> tuple[Reindeer, int]:
     """Determine which reindeer is the winner based on their points after a given time.
-    
+
     Returns the winning reindeer and the points they have.
 
-    Reindeer gain a point for each second that they are in the lead for distance traveled.
+    Reindeer gain a point for each second they are in the lead for distance traveled.
     Therefore, the winning reindeer is the one that maintains the lead the longest.
     """
 
@@ -140,13 +150,16 @@ def main() -> None:
 
     race_time = TARGET_TIME
 
-    distance_winner, winning_distance = find_winning_reindeer_by_distance(reindeer, race_time)
+    distance_winner, winning_distance = find_winning_reindeer_by_distance(
+        reindeer,
+        race_time,
+    )
     print(f"After a time of {race_time} seconds and judging by distance traveled:")
-    print(f"The winning reindeer is {distance_winner.name} with a distance of {winning_distance} km.")
+    print(f"{distance_winner.name} wins with a distance of {winning_distance} km.")
 
     points_winner, winning_points = find_winning_reindeer_by_points(reindeer, race_time)
     print(f"After a time of {race_time} seconds and judging by points:")
-    print(f"The winning reindeer is {points_winner.name} with {winning_points} points.")
+    print(f"{points_winner.name} wins with {winning_points} points.")
 
 
 if __name__ == "__main__":
